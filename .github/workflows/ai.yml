@@ -1,9 +1,10 @@
-name: AI Builder
+name: AI-Remote Builder
 
 on:
   push:
     paths:
       - "memory/convo.md"
+      - "memory/convo2.md"
 
 jobs:
   build:
@@ -21,15 +22,16 @@ jobs:
 
       - run: npm install node-fetch@2
 
-      - name: Run AI
+      - name: Run AI Builder
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: node src/agent/brain.js
 
-      - name: Push changes
+      - name: Auto Commit Changes
         run: |
           git config user.name "AI Bot"
           git config user.email "ai@bot.com"
           git add .
-          git commit -m "🤖 AI generated update" || echo "No changes"
-          git push
+          git commit -m "🤖 AI update" || echo "no changes"
+          git pull origin main --rebase --autostash || true
+          git push origin main
