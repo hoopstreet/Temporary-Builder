@@ -1,2 +1,2 @@
-# CHANGELOG
-All notable changes to this project will be documented here.
+# Changelog
+All changes and updates will be logged here.

@@ -1,2 +1,2 @@
-# KNOWLEDGE BASE
-This document contains the AI memory and learnings from this project.
+# AI Knowledge Base
+This document serves as the memory for the AI system.

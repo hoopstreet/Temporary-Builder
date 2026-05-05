@@ -1,2 +1,2 @@
-# README
-This is a project aimed at creating a fully autonomous DevOps system.
+# Autonomous Dev System
+This repository contains an autonomous dev system that executes based on Task.md.

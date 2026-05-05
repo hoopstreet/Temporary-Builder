@@ -1,15 +1,14 @@
-# Task Runner Workflow
 name: Task Runner
 
 on:
-  workflow_dispatch:
+  push:
+    paths:
+      - docs/Task.md
 
 jobs:
-  run:
+  task-runner:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
       - name: Execute Task
         run: |
-          # Execute your task logic based on Task.md
+          echo "Executing task from Task.md"

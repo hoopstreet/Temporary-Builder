@@ -1,18 +1,16 @@
-# Tagging Workflow
 name: Tagging
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - docs/VERSION.md
 
 jobs:
-  tag:
+  tagging:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
       - name: Create Tag
         run: |
-          git tag v$(cat docs/VERSION.md | grep 'VERSION:' | cut -d ' ' -f2)
-          git push origin --tags
+          TAG=$(cat docs/VERSION.md | grep VERSION | awk '{print $2}')
+          git tag -a "$TAG" -m "Release version $TAG"
+          git push origin "$TAG"

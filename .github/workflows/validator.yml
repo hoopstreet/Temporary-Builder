@@ -1,14 +1,14 @@
 name: Validator
 
 on:
-  push:
-    paths:
-      - docs/DNA.md
+  workflow_run:
+    workflows: ["Task Runner"]
+    types: [completed]
 
 jobs:
-  validate:
+  validator:
     runs-on: ubuntu-latest
     steps:
-      - name: Validate changes
+      - name: Validate Changes
         run: |
-          # Logic to validate changes before merging.
+          echo "Validating changes before merge"

@@ -1,4 +1,4 @@
-# SOURCE MAP
+# Source Map
 ## auth/login.js
 - Source: original repo
 - Modified: YES

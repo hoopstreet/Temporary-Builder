@@ -1,4 +1,3 @@
-# Versioning Workflow
 name: Versioning
 
 on:
@@ -7,15 +6,13 @@ on:
       - docs/VERSION.md
 
 jobs:
-  bump:
+  versioning:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Read VERSION.md
-        id: version
+      - name: Read version
         run: |
-          VERSION=$(cat docs/VERSION.md | grep 'VERSION:' | cut -d ' ' -f2)
-          echo "::set-output name=version::$VERSION"
-          echo "Bumping version to $VERSION"
-      # Add steps to auto-increment version based on your logic
+          VERSION=$(cat docs/VERSION.md | grep VERSION | awk '{print $2}')
+          echo "Current Version: $VERSION"
+      - name: Update Version
+        run: |
+          # Implement version update logic here.

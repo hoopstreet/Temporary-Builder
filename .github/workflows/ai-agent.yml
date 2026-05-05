@@ -1,18 +1,14 @@
-# AI Agent Workflow
 name: AI Agent
 
 on:
   workflow_run:
-    workflows: ["Merger"]
-    types:
-      - completed
+    workflows: ["Task Runner"]
+    types: [completed]
 
 jobs:
-  think:
+  ai-agent:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Run AI Processing
+      - name: Run AI
         run: |
-          # Your logic for AI processing
+          echo "Running AI logic based on completed tasks"

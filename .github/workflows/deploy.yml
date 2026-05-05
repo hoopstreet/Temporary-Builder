@@ -1,4 +1,3 @@
-# Deploy Workflow
 name: Deploy
 
 on:
@@ -10,8 +9,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Deploy Application
+      - name: Deploy to server
         run: |
-          # Deployment commands here
+          # Add deploy commands here

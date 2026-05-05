@@ -1,17 +1,14 @@
-# Docker Push Workflow
 name: Docker Push
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Docker Build"]
+    types: [completed]
 
 jobs:
   push:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Push Docker Image
+      - name: Push Docker image
         run: |
-          docker push myapp:${{ github.sha }}
+          echo "Pushing Docker image to DockerHub"

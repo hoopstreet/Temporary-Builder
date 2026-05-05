@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Sync Source Map
         run: |
-          # Logic to sync source map.
+          echo "Syncing source map changes"

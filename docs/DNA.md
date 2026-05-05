@@ -1,2 +1,2 @@
-# DNA
-This document describes the final merged system, capturing all essential components and workflows.
+# Final Merged System
+This document contains the final merged knowledge of the autonomous dev system.

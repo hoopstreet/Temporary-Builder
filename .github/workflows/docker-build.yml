@@ -1,4 +1,3 @@
-# Docker Build Workflow
 name: Docker Build
 
 on:
@@ -10,8 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Build Docker Image
+      - name: Build Docker image
         run: |
-          docker build -t myapp:${{ github.sha }} .
+          echo "Building Docker image"

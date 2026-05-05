@@ -1,18 +1,14 @@
-# Merger Workflow
-name: Merger
+name: Merge Intelligence
 
 on:
-  workflow_run:
-    workflows: ["Task Runner"]
-    types:
-      - completed
+  push:
+    paths:
+      - docs/DNA.md
 
 jobs:
-  merge:
+  merger:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Merge Changes
+      - name: Merge changes
         run: |
-          # Your logic to merge changes
+          echo "Merging changes into the system"

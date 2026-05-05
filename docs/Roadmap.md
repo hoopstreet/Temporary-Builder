@@ -1,2 +1,2 @@
 # Roadmap
-This document outlines the future plans and milestones for the project.
+This document outlines the plans for the evolution of the system.
