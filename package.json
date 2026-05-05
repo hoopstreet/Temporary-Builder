@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/hoopstreet/AI-Remote/issues"
   },
-  "homepage": "https://github.com/hoopstreet/AI-Remote#readme"
+  "homepage": "https://github.com/hoopstreet/AI-Remote#readme",
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  }
 }
