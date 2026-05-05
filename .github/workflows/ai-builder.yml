@@ -1,0 +1,32 @@
+name: Temporary Builder
+
+on:
+  push:
+    paths:
+      - "Temporary Builder/memory/convo.md"
+      - "Temporary Builder/memory/convo2.md"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install builder deps
+        run: |
+          cd "Temporary Builder"
+          npm install
+
+      - name: Run builder
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          node "Temporary Builder/Builder/runner.js"
