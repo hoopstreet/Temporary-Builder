@@ -1,4 +1,14 @@
-# Release Notes workflow
-- Generates release notes from:
-   * Task.md
-   * CHANGELOG.md
+name: Release Notes
+
+on:
+  push:
+    paths:
+      - docs/CHANGELOG.md
+
+jobs:
+  release-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate release notes
+        run: |
+          # Logic for generating release notes from Task.md and CHANGELOG.md goes here.

@@ -1,3 +1,17 @@
-# Tagging workflow
-- Creates Git tags:
-v1.4.2
+name: Tagging
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  tagging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Git Tag
+        run: |
+          git tag v${{ steps.version.outputs.version }}
+          git push origin v${{ steps.version.outputs.version }}

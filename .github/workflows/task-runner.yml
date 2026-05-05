@@ -1,2 +1,14 @@
-# Task Runner workflow
-This file initiates tasks based on Task.md.
+name: Task Runner
+
+on:
+  push:
+    paths:
+      - docs/Task.md
+
+jobs:
+  run-task:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read Task
+        run: |
+          # Read Task.md and execute the task.

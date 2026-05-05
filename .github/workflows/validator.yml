@@ -1,2 +1,14 @@
-# Validator workflow
-Validates the changes before merging.
+name: Validator
+
+on:
+  push:
+    paths:
+      - docs/DNA.md
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate changes
+        run: |
+          # Logic to validate changes before merging.

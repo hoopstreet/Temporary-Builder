@@ -1,3 +1,14 @@
-# Docker Build workflow
-- Build Docker image
-- Tag with version
+name: Docker Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Docker image
+        run: |
+          # Logic to build Docker image.

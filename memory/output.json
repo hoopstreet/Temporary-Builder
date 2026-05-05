@@ -2,119 +2,83 @@
   "files": [
     {
       "path": "docs/Task.md",
-      "content": "Priority: HIGH\nType: feature | fix | refactor\n\n# Task description\nThis is where you'll describe the task to be implemented."
+      "content": "Priority: HIGH\nType: feature\n\n# Task\n- Description of the task to be executed."
     },
     {
       "path": "docs/DNA.md",
-      "content": "# DNA Document\nThis document will contain the final merged system, detailing the overall architecture and key integrations."
+      "content": "# DNA\n- Final merged system details."
     },
     {
       "path": "docs/Roadmap.md",
-      "content": "# Roadmap\nThis document outlines the planned features, enhancements, and timeline for delivery."
+      "content": "# Roadmap\n- Future plans and milestones."
     },
     {
       "path": "docs/CHANGELOG.md",
-      "content": "# Changelog\nAll notable changes to this project will be documented here."
+      "content": "# CHANGELOG\n- History of changes made."
     },
     {
       "path": "docs/README.md",
-      "content": "# Project Title\nA brief description of what this project is about."
+      "content": "# README\n- Project description and setup instructions."
     },
     {
       "path": "docs/KNOWLEDGE_BASE.md",
-      "content": "# Knowledge Base\nThis serves as the AI's memory, containing essential learnings and insights about the project."
+      "content": "# KNOWLEDGE_BASE\n- AI memory storage."
     },
     {
       "path": "docs/SOURCE_MAP.md",
-      "content": "# SOURCE MAP\n## auth/login.js\n- Source: original repo\n- Modified: YES\n- Changes: JWT → Token system v2"
+      "content": "# SOURCE MAP\n- Tracks changes and origins of key files.\n- Example:\n  ## auth/login.js\n  - Source: original repo\n  - Modified: YES\n  - Changes: JWT → Token system v2"
     },
     {
       "path": "docs/VERSION.md",
       "content": "VERSION: 1.4.2\nSTATUS: stable\nLAST_UPDATED: 2026-05-04"
     },
     {
-      "path": ".github/workflows/ci.yml",
-      "content": "# CI workflow\nThis file contains the CI pipeline configurations."
-    },
-    {
-      "path": ".github/workflows/build.yml",
-      "content": "# Build workflow\nThis file contains the configurations for building the application."
-    },
-    {
-      "path": ".github/workflows/test.yml",
-      "content": "# Test workflow\nThis file contains the details for testing the application."
-    },
-    {
-      "path": ".github/workflows/preview.yml",
-      "content": "# Preview workflow\nThis file contains configurations for previewing the build."
-    },
-    {
       "path": ".github/workflows/versioning.yml",
-      "content": "# Versioning workflow\n- Reads VERSION.md\n- Auto-increment (patch/minor/major)"
+      "content": "name: Versioning\n\non:\n  push:\n    paths:\n      - docs/VERSION.md\n\njobs:\n  versioning:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Read VERSION.md\n        id: version\n        run: |\n          VERSION=$(cat docs/VERSION.md | grep VERSION | cut -d ' ' -f 2)\n          echo \"::set-output name=version::$VERSION\"\n      - name: Auto-increment version\n        run: |\n          # Logic for version bump goes here."
     },
     {
       "path": ".github/workflows/tagging.yml",
-      "content": "# Tagging workflow\n- Creates Git tags:\nv1.4.2"
+      "content": "name: Tagging\n\non:\n  push:\n    branches:\n      - main\n\njobs:\n  tagging:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout code\n        uses: actions/checkout@v2\n      - name: Create Git Tag\n        run: |\n          git tag v${{ steps.version.outputs.version }}\n          git push origin v${{ steps.version.outputs.version }}"
     },
     {
       "path": ".github/workflows/release-notes.yml",
-      "content": "# Release Notes workflow\n- Generates release notes from:\n   * Task.md\n   * CHANGELOG.md"
+      "content": "name: Release Notes\n\non:\n  push:\n    paths:\n      - docs/CHANGELOG.md\n\njobs:\n  release-notes:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Generate release notes\n        run: |\n          # Logic for generating release notes from Task.md and CHANGELOG.md goes here."
     },
     {
       "path": ".github/workflows/deploy.yml",
-      "content": "# Deploy workflow\nThis file manages the deployment process."
-    },
-    {
-      "path": ".github/workflows/release.yml",
-      "content": "# Release workflow\nThis handles the release of versions."
+      "content": "name: Deploy\n\non:\n  push:\n    branches:\n      - main\n\njobs:\n  deploy:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Deploy application\n        run: |\n          # Deployment logic goes here."
     },
     {
       "path": ".github/workflows/task-runner.yml",
-      "content": "# Task Runner workflow\nThis file initiates tasks based on Task.md."
-    },
-    {
-      "path": ".github/workflows/ai-agent.yml",
-      "content": "# AI Agent workflow\nThis file manages the AI processes for the project."
+      "content": "name: Task Runner\n\non:\n  push:\n    paths:\n      - docs/Task.md\n\njobs:\n  run-task:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Read Task\n        run: |\n          # Read Task.md and execute the task."
     },
     {
       "path": ".github/workflows/merger.yml",
-      "content": "# Merger workflow\nHandles merging changes into the main branch."
+      "content": "name: Merger\n\non:\n  push:\n    paths:\n      - docs/DNA.md\n\njobs:\n  merge:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Merge changes\n        run: |\n          # Logic to merge changes into DNA.md."
     },
     {
       "path": ".github/workflows/dna-sync.yml",
-      "content": "# DNA Sync workflow\nThis file synchronizes the DNA document with system changes."
+      "content": "name: DNA Sync\n\non:\n  push:\n    paths:\n      - docs/DNA.md\n\njobs:\n  sync:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Sync DNA\n        run: |\n          # Logic to sync DNA document."
+    },
+    {
+      "path": ".github/workflows/source-map-sync.yml",
+      "content": "name: Source Map Sync\n\non:\n  push:\n    paths:\n      - docs/SOURCE_MAP.md\n\njobs:\n  sync:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Sync Source Map\n        run: |\n          # Logic to sync source map."
     },
     {
       "path": ".github/workflows/validator.yml",
-      "content": "# Validator workflow\nValidates the changes before merging."
+      "content": "name: Validator\n\non:\n  push:\n    paths:\n      - docs/DNA.md\n\njobs:\n  validate:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Validate changes\n        run: |\n          # Logic to validate changes before merging."
     },
     {
       "path": ".github/workflows/docker-build.yml",
-      "content": "# Docker Build workflow\n- Build Docker image\n- Tag with version"
+      "content": "name: Docker Build\n\non:\n  push:\n    branches:\n      - main\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Build Docker image\n        run: |\n          # Logic to build Docker image."
     },
     {
       "path": ".github/workflows/docker-push.yml",
-      "content": "# Docker Push workflow\n- Push the Docker image to DockerHub"
+      "content": "name: Docker Push\n\non:\n  push:\n    tags:\n      - 'v*'\n\njobs:\n  push:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Push to Docker Hub\n        run: |\n          # Logic to push Docker image to registry."
     },
     {
       "path": ".github/workflows/hf-sync.yml",
-      "content": "# Hugging Face Sync workflow\n- Sync to Hugging Face repo\n- Uses:\nhf.Dockerfile"
-    },
-    {
-      "path": "task-runner.sh",
-      "content": "#!/bin/bash\n\n# Task Runner Script\nif [[ -f docs/Task.md ]]; then\n    echo \"Executing tasks from Task.md\"\n    # Custom execution logic here\nelse\n    echo \"No tasks found.\"\nfi\n"
-    },
-    {
-      "path": "Dockerfile",
-      "content": "FROM node:16\nWORKDIR /app\nCOPY . .\nRUN npm install\nCMD [\"npm\", \"start\"]"
-    },
-    {
-      "path": "hf.Dockerfile",
-      "content": "FROM hf.Dockerfile\n# Additional configurations for Hugging Face integration"
-    },
-    {
-      "path": ".env.example",
-      "content": "DATABASE_URL=your_database_url\nAPI_KEY=your_api_key"
+      "content": "name: HF Sync\n\non:\n  push:\n    branches:\n      - main\n\njobs:\n  sync:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Sync to Hugging Face\n        run: |\n          # Logic to sync to Hugging Face repo."
     }
   ]
 }

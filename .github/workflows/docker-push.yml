@@ -1,2 +1,14 @@
-# Docker Push workflow
-- Push the Docker image to DockerHub
+name: Docker Push
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Push to Docker Hub
+        run: |
+          # Logic to push Docker image to registry.

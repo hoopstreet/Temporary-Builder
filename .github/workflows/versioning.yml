@@ -1,3 +1,19 @@
-# Versioning workflow
-- Reads VERSION.md
-- Auto-increment (patch/minor/major)
+name: Versioning
+
+on:
+  push:
+    paths:
+      - docs/VERSION.md
+
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read VERSION.md
+        id: version
+        run: |
+          VERSION=$(cat docs/VERSION.md | grep VERSION | cut -d ' ' -f 2)
+          echo "::set-output name=version::$VERSION"
+      - name: Auto-increment version
+        run: |
+          # Logic for version bump goes here.

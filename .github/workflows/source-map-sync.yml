@@ -1,0 +1,14 @@
+name: Source Map Sync
+
+on:
+  push:
+    paths:
+      - docs/SOURCE_MAP.md
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync Source Map
+        run: |
+          # Logic to sync source map.

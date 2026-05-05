@@ -1,4 +1,14 @@
-# Hugging Face Sync workflow
-- Sync to Hugging Face repo
-- Uses:
-hf.Dockerfile
+name: HF Sync
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync to Hugging Face
+        run: |
+          # Logic to sync to Hugging Face repo.

@@ -1,2 +1,14 @@
-# DNA Sync workflow
-This file synchronizes the DNA document with system changes.
+name: DNA Sync
+
+on:
+  push:
+    paths:
+      - docs/DNA.md
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync DNA
+        run: |
+          # Logic to sync DNA document.

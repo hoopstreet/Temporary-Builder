@@ -1,2 +1,14 @@
-# Deploy workflow
-This file manages the deployment process.
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy application
+        run: |
+          # Deployment logic goes here.

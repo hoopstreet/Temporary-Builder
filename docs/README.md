@@ -1,2 +1,2 @@
-# Project Title
-A brief description of what this project is about.
+# README
+- Project description and setup instructions.
