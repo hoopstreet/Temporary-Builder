@@ -3,9 +3,10 @@
 
 ## 📦 Files Generated
 - bot.py
+- requirements.txt
 
 ## 📌 Dependencies
-pip install python-telegram-bot
+pip install -r requirements.txt
 
 ## ⚙️ Mode
 SELF-HEAL ENABLED

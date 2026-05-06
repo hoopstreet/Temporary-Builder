@@ -40,5 +40,18 @@
         "content": "import telegram\nfrom telegram.ext import Updater, CommandHandler, MessageHandler, Filters\n\nTOKEN = 'YOUR_TELEGRAM_BOT_TOKEN'\n\ndef start(update, context):\n    update.message.reply_text('Hello! I am your bot. How can I help you?')\n\ndef help_command(update, context):\n    update.message.reply_text('You can send me a message and I will respond!')\n\ndef echo(update, context):\n    update.message.reply_text(update.message.text)\n\ndef main():\n    updater = Updater(TOKEN, use_context=True)\n\n    dp = updater.dispatcher\n\n    dp.add_handler(CommandHandler('start', start))\n    dp.add_handler(CommandHandler('help', help_command))\n    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))\n\n    updater.start_polling()\n    updater.idle()\n\nif __name__ == '__main__':\n    main()"
       }
     ]
+  },
+  {
+    "time": "2026-05-06T03:24:06.785Z",
+    "files": [
+      {
+        "path": "bot.py",
+        "content": "import telebot\n\nAPI_TOKEN = 'YOUR_API_TOKEN'\nbot = telebot.TeleBot(API_TOKEN)\n\n@bot.message_handler(commands=['start', 'help'])\ndef send_welcome(message):\n    bot.reply_to(message, 'Welcome! This is your Telegram bot.')\n\n@bot.message_handler(func=lambda message: True)\ndef echo_all(message):\n    bot.reply_to(message, message.text)\n\nif __name__ == '__main__':\n    bot.polling()"
+      },
+      {
+        "path": "requirements.txt",
+        "content": "pyTelegramBotAPI"
+      }
+    ]
   }
 ]
