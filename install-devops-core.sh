@@ -1,3 +1,15 @@
+#!/bin/sh
+
+echo "🧠 INSTALLING AUTONOMOUS DEVOPS COGNITION CORE..."
+
+mkdir -p "Temporary Builder/Builder"
+mkdir -p "Temporary Builder/memory"
+mkdir -p "docs"
+
+# -------------------------
+# SAFE RUNNER (NO CRASH)
+# -------------------------
+cat > "Temporary Builder/Builder/runner.js" << 'JS'
 const fs = require("fs");
 
 function read(file) {
@@ -49,3 +61,10 @@ async function runCore() {
 }
 
 runCore();
+JS
+
+# -------------------------
+# MEMORY FILES
+# -------------------------
+cat > "Temporary Builder/memory/convo.md" << 'EOF'
+ENTRY PROJECT SPEC
