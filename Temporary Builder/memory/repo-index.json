@@ -1,1 +1,12 @@
-{}
+{
+  "totalRuns": 2,
+  "lastRun": {
+    "time": "2026-05-06T03:23:11.184Z",
+    "files": [
+      {
+        "path": "bot.py",
+        "content": "import telegram\nfrom telegram.ext import Updater, CommandHandler, MessageHandler, Filters\n\nTOKEN = 'YOUR_TELEGRAM_BOT_TOKEN'\n\ndef start(update, context):\n    update.message.reply_text('Hello! I am your bot. How can I help you?')\n\ndef help_command(update, context):\n    update.message.reply_text('You can send me a message and I will respond!')\n\ndef echo(update, context):\n    update.message.reply_text(update.message.text)\n\ndef main():\n    updater = Updater(TOKEN, use_context=True)\n\n    dp = updater.dispatcher\n\n    dp.add_handler(CommandHandler('start', start))\n    dp.add_handler(CommandHandler('help', help_command))\n    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))\n\n    updater.start_polling()\n    updater.idle()\n\nif __name__ == '__main__':\n    main()"
+      }
+    ]
+  }
+}
