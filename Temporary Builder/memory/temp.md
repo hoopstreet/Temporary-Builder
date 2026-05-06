@@ -1,10 +1,10 @@
-# 🧠 TEMP BUILDER MEMORY
+# 🧠 TEMP MEMORY
 
-ENTRY → convo.md
-FINAL → convo2.md
+ENTRY = convo.md
+FINAL = convo2.md
 
 RULES:
-- root repo = final project output
+- root repo = final output
 - Temporary Builder = internal system only
-- NEVER mix outputs
-- NEVER touch workflow unless needed
+- never mix outputs
+- never modify workflows automatically

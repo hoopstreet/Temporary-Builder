@@ -2,7 +2,7 @@ const fs = require("fs");
 const { runBrain } = require("./brain");
 const { execSync } = require("child_process");
 
-function safeExec(cmd) {
+function run(cmd) {
   try {
     return execSync(cmd, { stdio: "inherit" });
   } catch (e) {
@@ -10,7 +10,7 @@ function safeExec(cmd) {
   }
 }
 
-function writeFileSafe(path, content) {
+function write(path, content) {
   const dir = path.split("/").slice(0, -1).join("/");
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path, content || "");
@@ -18,56 +18,48 @@ function writeFileSafe(path, content) {
 }
 
 (async () => {
-  console.log("🚀 SAFE BUILDER START");
+  console.log("🚀 SAFE BRAIN START");
 
-  let result;
-  try {
-    result = await runBrain();
-  } catch (e) {
-    console.log("❌ BRAIN FAILED → fallback");
-    result = null;
-  }
+  let result = await runBrain();
 
   if (!result || !result.files) {
+    console.log("❌ fallback mode");
     result = {
       files: [
         {
-          path: "Temporary Builder/docs/summary.md",
-          content: "# Safe build fallback mode active"
+          path: "docs/fallback.md",
+          content: "Safe fallback output"
         }
       ]
     };
   }
 
-  // WRITE ROOT + TEMP FILES
   for (const f of result.files) {
-    writeFileSafe(f.path, f.content);
+    write(f.path, f.content);
   }
 
-  // AUTO CREATE CREDENTIAL DOC
-  writeFileSafe(
+  // credentials doc auto-create
+  write(
     "docs/tools-credentials.md",
-`# 🔐 Tools Credentials Map
+`# 🔐 CREDENTIALS GUIDE
 
-## GitHub Actions
-- GITHUB_TOKEN → auto provided
+## GitHub
+- GITHUB_TOKEN (auto)
 
-## AI APIs
-- OPENROUTER_API_KEY → add in GitHub Secrets
+## AI
+- OPENROUTER_API_KEY → GitHub Secrets
 
-## Deploy Platforms
-- Northflank → NF_TOKEN
-- Render → RENDER_API_KEY
-- Railway → RAILWAY_TOKEN
+## Hosting
+- NF_TOKEN (Northflank)
+- RENDER_API_KEY
+- RAILWAY_TOKEN
 
-⚠️ NEVER hardcode secrets
+⚠️ Never hardcode secrets
 `
   );
 
-  // SAFE GIT FLOW (NO REBASE)
-  safeExec("git config user.name 'AI-BOT'");
-  safeExec("git config user.email 'ai@bot.local'");
-  safeExec("git add .");
+  // SAFE GIT FLOW
+  run("git add .");
 
   const status = execSync("git status --porcelain").toString();
 
@@ -76,9 +68,9 @@ function writeFileSafe(path, content) {
     return;
   }
 
-  safeExec("git commit -m '🧠 SAFE AUTO BUILD'");
-  safeExec("git pull --no-rebase origin main || true");
-  safeExec("git push origin main || true");
+  run("git commit -m '🧠 SAFE AUTO BUILD'");
+  run("git pull --no-rebase origin main || true");
+  run("git push origin main || true");
 
   console.log("✅ DONE");
 })();
