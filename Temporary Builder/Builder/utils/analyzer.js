@@ -1,54 +1,24 @@
 const fs = require("fs");
 const path = require("path");
 
-function scanDir(dir) {
-  let results = [];
+function scan(dir, list = []) {
+  if (!fs.existsSync(dir)) return list;
 
-  if (!fs.existsSync(dir)) return results;
+  const files = fs.readdirSync(dir);
 
-  const items = fs.readdirSync(dir);
+  for (const file of files) {
+    const full = path.join(dir, file);
 
-  for (const item of items) {
-    const full = path.join(dir, item);
+    if (file === "node_modules" || file === ".git") continue;
 
-    if (fs.lstatSync(full).isDirectory()) {
-      results = results.concat(scanDir(full));
+    if (fs.statSync(full).isDirectory()) {
+      scan(full, list);
     } else {
-      results.push(full);
+      list.push(full);
     }
   }
 
-  return results;
+  return list;
 }
 
-function analyzeFile(filePath) {
-  try {
-    const content = fs.readFileSync(filePath, "utf-8");
-
-    return {
-      path: filePath,
-      size: content.length,
-      empty: content.trim().length === 0
-    };
-  } catch {
-    return {
-      path: filePath,
-      size: 0,
-      empty: true
-    };
-  }
-}
-
-function fullScan() {
-  const rootFiles = scanDir(".")
-    .filter(f =>
-      f.startsWith("docs/") ||
-      f.startsWith(".github/") ||
-      f.startsWith("src/") ||
-      f.startsWith("Temporary Builder/")
-    );
-
-  return rootFiles.map(analyzeFile);
-}
-
-module.exports = { fullScan };
+module.exports = { scan };

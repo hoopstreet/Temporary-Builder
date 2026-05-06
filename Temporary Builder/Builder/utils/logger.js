@@ -14,7 +14,8 @@ function logBuild(data) {
   history.push({
     time: new Date().toISOString(),
     files: data.files?.map(f => f.path) || [],
-    install: data.install || []
+    install: data.install || [],
+    summary: "AUTO BUILD"
   });
 
   fs.writeFileSync(file, JSON.stringify(history, null, 2));
