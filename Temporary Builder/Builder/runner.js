@@ -1,72 +1,57 @@
 const { runAI } = require("./brain");
 const { writeFiles } = require("./utils/writer");
+const { autoRefactor } = require("./utils/refactor-engine");
+const { store } = require("./utils/vector-memory");
 const fs = require("fs");
 const { execSync } = require("child_process");
 
-const INDEX = "Temporary Builder/memory/repo-index.json";
-
-function loadIndex() {
-  return JSON.parse(fs.readFileSync(INDEX, "utf-8"));
-}
-
-function saveIndex(i) {
-  fs.writeFileSync(INDEX, JSON.stringify(i, null, 2));
-}
-
 (async () => {
-  console.log("🚀 TEMP BUILDER v2 START");
+  console.log("🚀 TEMP BUILDER v3 (REFRACTOR + VECTOR MEMORY)");
 
   try {
     const result = await runAI();
 
     if (!result) throw new Error("AI failed");
 
-    // WRITE FILES
-    writeFiles(result.files || []);
+    const files = result.files || [];
 
-    // SAVE RAW
+    // 🧠 STORE INTO VECTOR MEMORY
+    for (const f of files) {
+      store(f.path, f.content);
+    }
+
+    // 🧠 AUTO REFACTOR STEP
+    const refactored = autoRefactor(files);
+
+    // WRITE CLEANED FILES ONLY
+    writeFiles(refactored.cleanedFiles);
+
+    // LOG RAW
     fs.writeFileSync(
       "Temporary Builder/docs/raw.txt",
-      JSON.stringify(result, null, 2)
+      JSON.stringify({
+        original: files.length,
+        cleaned: refactored.cleanedFiles.length,
+        duplicates: refactored.duplicates,
+        suggestions: refactored.suggestions
+      }, null, 2)
     );
 
-    // UPDATE INDEX META
-    const index = loadIndex();
-    index.lastBuild = new Date().toISOString();
-    saveIndex(index);
-
-    // GIT AUTO COMMIT
+    // GIT SYNC
     execSync("git config user.name 'TEMP-AI'");
     execSync("git config user.email 'ai@bot.local'");
 
     execSync("git add .");
 
     const changes = execSync("git status --porcelain").toString();
-    if (!changes) {
-      console.log("No changes");
-      return;
-    }
+    if (!changes) return;
 
-    execSync("git commit -m '🤖 auto build v2'");
+    execSync("git commit -m '🧠 refactor + vector memory update'");
     execSync("git pull --rebase origin main || true");
     execSync("git push origin main || true");
 
-    console.log("✅ BUILD COMPLETE");
+    console.log("✅ v3 COMPLETE");
   } catch (e) {
     console.log("❌ ERROR:", e.message);
-
-    // 💀 AUTO FAILURE TRACKING
-    const index = loadIndex();
-    index.failures.push({
-      time: new Date().toISOString(),
-      error: e.message
-    });
-    saveIndex(index);
-
-    // 🔁 AUTO ROLLBACK
-    try {
-      execSync("git revert HEAD --no-edit");
-      execSync("git push origin main");
-    } catch {}
   }
 })();
