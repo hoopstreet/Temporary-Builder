@@ -1,80 +1,37 @@
 const fs = require("fs");
 const path = require("path");
-const { runBrain } = require("./brain");
-const { execSync } = require("child_process");
+const { runSwarm } = require("./swarm");
 
-// 🧠 SAFE WRITE
-function writeSafe(filePath, content) {
-  const dir = path.dirname(filePath);
+function writeFileSafe(filePath, content) {
+  const full = path.resolve(filePath);
+  const dir = path.dirname(full);
   fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(filePath, content || "");
-  console.log("✔", filePath);
+  fs.writeFileSync(full, content || "");
+  console.log("✔ FILE:", filePath);
 }
 
-// 🧠 SAFE EXEC
-function run(cmd) {
-  try { execSync(cmd, { stdio: "inherit" }); }
-  catch (e) { console.log("⚠️", cmd); }
-}
-
-// 🧠 GIT AGENT
-function gitAgent() {
-  run("git add .");
-
-  const status = execSync("git status --porcelain").toString();
-
-  if (!status) return false;
-
-  run("git commit -m '🧠 V3 AUTO MULTI-AGENT BUILD'");
-  run("git pull --no-rebase origin main || true");
-  run("git push origin main || true");
-
-  return true;
-}
-
-// 🧠 MAIN EXECUTION
 (async () => {
-  console.log("🚀 V3 AUTONOMOUS DEVOPS BRAIN START");
+  console.log("🚀 V5 SWARM START");
 
   let result;
 
   try {
-    result = await runBrain();
+    result = await runSwarm();
   } catch (e) {
-    console.log("❌ BRAIN FAIL SAFE MODE");
-    result = { files: [] };
+    console.log("❌ FALLBACK MODE");
+    result = {
+      files: [
+        {
+          path: "docs/fallback.md",
+          content: "# SAFE MODE ACTIVE"
+        }
+      ]
+    };
   }
 
-  if (!result.files) result.files = [];
-
-  // WRITE ALL FILES
-  for (const f of result.files) {
-    writeSafe(f.path, f.content);
+  for (const file of result.files || []) {
+    writeFileSafe(file.path, file.content);
   }
 
-  // ALWAYS CREATE TOOL DOCS
-  writeSafe(
-    "docs/tools-credentials.md",
-`# 🔐 CREDENTIAL SYSTEM
-
-GitHub:
-- GITHUB_TOKEN (auto)
-
-AI:
-- OPENROUTER_API_KEY (GitHub Secrets)
-
-Deploy:
-- NF_TOKEN
-- RENDER_API_KEY
-- RAILWAY_TOKEN
-
-RULE:
-Never expose secrets
-`
-  );
-
-  // GIT AGENT
-  gitAgent();
-
-  console.log("✅ V3 COMPLETE");
+  console.log("✅ DONE");
 })();

@@ -1,62 +1,77 @@
 const fs = require("fs");
+const fetch = require("node-fetch");
 
-function read(p) {
-  try { return fs.readFileSync(p, "utf-8"); }
-  catch { return ""; }
+function read(file) {
+  try {
+    return fs.readFileSync(file, "utf-8");
+  } catch {
+    return "";
+  }
 }
 
-// 🧠 ENTRY AGENT
-function entryAgent() {
-  return read("Temporary Builder/memory/convo.md");
+// 🧠 CLOUD BRAIN CORE
+async function runCloudBrain() {
+  const entry = read("Temporary Builder/memory/convo.md");
+  const final = read("Temporary Builder/memory/convo2.md");
+
+  const prompt = `
+You are V7 CLOUD DEVOPS OS.
+
+FEATURES:
+- repo-to-repo learning
+- DAG execution graph
+- PR-based deployment
+- semantic diff engine
+- microservice generator
+
+RULES:
+- output ONLY JSON
+- no markdown
+- no explanation
+
+FORMAT:
+{
+  "files": [
+    { "path": "services/api.js", "content": "console.log('api')" }
+  ]
 }
 
-// 🧠 FINAL AGENT
-function finalAgent() {
-  return read("Temporary Builder/memory/convo2.md");
-}
+ENTRY:
+${entry}
 
-// 🧠 DEBUG AGENT
-function debugAgent(files) {
-  return files.filter(f => f && f.path && f.content);
-}
+FINAL:
+${final}
 
-// 🧠 REFACTOR AGENT (safe clean)
-function refactorAgent(files) {
-  return files.map(f => ({
-    path: f.path,
-    content: (f.content || "").trim()
-  }));
-}
+Generate production-ready distributed system.
+`;
 
-// 🧠 MAIN BRAIN
-async function runBrain() {
-
-  const entry = entryAgent();
-  const final = finalAgent();
-
-  // BASE GENERATION (safe structure only)
-  let files = [
-    {
-      path: "README.md",
-      content: "# 🚀 PROJECT ROOT\n\nENTRY:\n" + entry
+  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer " + process.env.OPENROUTER_API_KEY,
+      "Content-Type": "application/json"
     },
-    {
-      path: "docs/project.md",
-      content: "# FINAL SPEC\n\n" + final
-    },
-    {
-      path: "Temporary Builder/docs/status.md",
-      content: "# V3 SYSTEM ACTIVE\nMulti-Agent Brain Running"
-    }
-  ];
+    body: JSON.stringify({
+      model: "openai/gpt-4o-mini",
+      temperature: 0.2,
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
 
-  // DEBUG CHECK
-  files = debugAgent(files);
+  const data = await res.json();
 
-  // REFACTOR CLEAN
-  files = refactorAgent(files);
-
-  return { files };
+  try {
+    return JSON.parse(data.choices[0].message.content);
+  } catch {
+    return {
+      files: [
+        {
+          path: "docs/v7-error.md",
+          content: "⚠️ JSON FAILURE → SAFE MODE"
+        }
+      ]
+    };
+  }
 }
 
-module.exports = { runBrain };
+module.exports = { runCloudBrain };
