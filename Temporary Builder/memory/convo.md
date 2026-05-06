@@ -1,1 +1,1 @@
-ENTRY SPEC
+# ENTRY PROJECT (convo.md)

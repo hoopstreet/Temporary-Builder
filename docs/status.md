@@ -1,1 +1,0 @@
-✅ System running in COGNITION CORE MODE
