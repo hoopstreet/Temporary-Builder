@@ -1,7 +1,4 @@
 function clean(text) {
-  return text
-    .replace(/```json/g, "")
-    .replace(/```/g, "")
-    .trim();
+  return text.replace(/```/g, "").trim();
 }
 module.exports = { clean };

@@ -1,10 +1,12 @@
-name: TEMP AI BUILDER
+name: TEMP AI BUILDER - FINAL
 
 on:
   push:
     paths:
       - "Temporary Builder/memory/**"
   workflow_dispatch:
+  schedule:
+    - cron: "*/30 * * * *"
 
 permissions:
   contents: write
@@ -20,10 +22,21 @@ jobs:
         with:
           node-version: 18
 
-      - run: |
+      - name: Install
+        run: |
           cd "Temporary Builder"
           npm install
 
-      - run: node "Temporary Builder/Builder/runner.js"
+      - name: Run Builder
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: node "Temporary Builder/Builder/runner.js"
+
+      - name: Auto Commit
+        run: |
+          git config user.name "AI-BOT"
+          git config user.email "ai@bot.local"
+          git add .
+          git diff --staged --quiet || git commit -m "🧠 AUTO BUILD"
+          git pull --rebase origin main || true
+          git push origin main || true

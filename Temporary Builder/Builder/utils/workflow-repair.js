@@ -1,26 +1,27 @@
 const fs = require("fs");
 
-function repairWorkflows() {
+function detectBrokenWorkflows() {
   const dir = ".github/workflows";
-  if (!fs.existsSync(dir)) return;
+  if (!fs.existsSync(dir)) return [];
 
-  fs.readdirSync(dir).forEach(file => {
-    const full = dir + "/" + file;
-    let content = fs.readFileSync(full, "utf-8");
-
-    if (!content.includes("actions/checkout")) {
-      content = content.replace(
-        "steps:",
-        "steps:\n      - uses: actions/checkout@v4"
-      );
-    }
-
-    if (!content.includes("permissions:")) {
-      content = "permissions:\n  contents: write\n\n" + content;
-    }
-
-    fs.writeFileSync(full, content);
-  });
+  return fs.readdirSync(dir).filter(file => {
+    const content = fs.readFileSync(`${dir}/${file}`, "utf-8");
+    return !content.includes("runs-on") || !content.includes("steps:");
+  }).map(f => ({ file: f }));
 }
 
-module.exports = { repairWorkflows };
+function autoFixWorkflow(path) {
+  let content = fs.readFileSync(path, "utf-8");
+
+  if (!content.includes("permissions:")) {
+    content = "permissions:\n  contents: write\n\n" + content;
+  }
+
+  if (!content.includes("actions/checkout@v4")) {
+    content = content.replace("steps:", "steps:\n      - uses: actions/checkout@v4");
+  }
+
+  fs.writeFileSync(path, content);
+}
+
+module.exports = { detectBrokenWorkflows, autoFixWorkflow };

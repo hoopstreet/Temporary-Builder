@@ -6,8 +6,8 @@ function analyzeLogs() {
 
   const logs = JSON.parse(fs.readFileSync(file));
   return {
-    total: logs.length,
-    last: logs[logs.length - 1]
+    totalRuns: logs.length,
+    lastRun: logs[logs.length - 1]
   };
 }
 
