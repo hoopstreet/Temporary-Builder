@@ -1,49 +1,34 @@
-name: 🧠 Temp AI Builder
+name: TEMP AI BUILDER
 
 on:
   push:
     paths:
-      - 'Temporary Builder/memory/convo.md'
-      - 'Temporary Builder/memory/convo2.md'
-  workflow_dispatch:
-  schedule:
-    - cron: "*/30 * * * *"
+      - "Temporary Builder/memory/convo.md"
+      - "Temporary Builder/memory/convo2.md"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - name: Install deps
-        run: |
-          cd "Temporary Builder"
-          npm install || true
+      - name: install
+        run: npm install
 
-      - name: Run Builder
-        run: |
-          node "Temporary Builder/Builder/runner.js"
+      - name: run builder
+        run: node "Temporary Builder/Builder/runner.js"
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
 
-      - name: Commit Output
+      - name: commit
         run: |
           git config user.name "AI-BOT"
           git config user.email "bot@ai.dev"
-
           git add .
-
-          if git diff --cached --quiet; then
-            echo "✅ No changes"
-            exit 0
-          fi
-
-          git commit -m "🧠 AUTO BUILD OUTPUT"
-
-          git pull --rebase origin main || true
-          git push origin main || true
+          git commit -m "🧠 DAG AUTO BUILD" || echo "no changes"
+          git push
